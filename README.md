@@ -14,7 +14,7 @@
 
 </div>
 
----
+---$$\text{Risk Score} = \text{Overtime} + \text{Low Pay (<45K)} + \text{Far Commute (>20km)} + \text{Low Tenure (<2yrs)} + \text{Low Satisfaction } (\le 2)$$
 
 ## 📌 Project Overview
 
