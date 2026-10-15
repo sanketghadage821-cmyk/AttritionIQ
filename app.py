@@ -1,23 +1,30 @@
-import os
-import snowflake.connector
+import pandas as pd
 import streamlit as st
+from src.connect_snowflake import get_snowflake_connection
+
+st.set_page_config(
+    page_title="AttritionIQ - HR Analytics", page_icon="⚡", layout="wide"
+)
+
+st.title("⚡ AttritionIQ: HR Analytics & Retention Intelligence")
 
 
-def get_secret(key, default=""):
-    # First check Streamlit Cloud secrets, then fallback to local .env
-    if hasattr(st, "secrets") and key in st.secrets:
-        return st.secrets[key]
-    return os.getenv(key, default)
+@st.cache_data(ttl=600)
+def load_data():
+    conn = get_snowflake_connection()
+    query = "SELECT * FROM HR_ATTRITION.RAW.HR_ATTRITION_FINAL;"
+    df = pd.read_sql(query, conn)
+    conn.close()
+    return df
 
 
-def get_snowflake_connection():
-    conn = snowflake.connector.connect(
-        user=get_secret("SNOWFLAKE_USER"),
-        password=get_secret("SNOWFLAKE_PASSWORD"),
-        account=get_secret("SNOWFLAKE_ACCOUNT"),
-        role=get_secret("SNOWFLAKE_ROLE", "ACCOUNTADMIN"),
-        warehouse=get_secret("SNOWFLAKE_WAREHOUSE", "HR_WH1"),
-        database=get_secret("SNOWFLAKE_DATABASE", "HR_ATTRITION"),
-        schema=get_secret("SNOWFLAKE_SCHEMA", "RAW"),
-    )
-    return conn
+try:
+    with st.spinner("Connecting to Snowflake and fetching HR dataset..."):
+        df = load_data()
+
+    st.success(f"Successfully loaded {len(df)} records!")
+    st.dataframe(df.head())
+
+except Exception as e:
+    st.error("Failed to load data from Snowflake.")
+    st.exception(e)  # Prints full traceback on the app interface
