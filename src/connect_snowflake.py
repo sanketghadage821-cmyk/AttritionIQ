@@ -1,23 +1,23 @@
 import os
-from dotenv import load_dotenv
 import snowflake.connector
-import pandas as pd
+import streamlit as st
 
-load_dotenv()
 
-conn = snowflake.connector.connect(
-    user=os.getenv("SNOWFLAKE_USER"),
-    password=os.getenv("SNOWFLAKE_PASSWORD"),
-    account=os.getenv("SNOWFLAKE_ACCOUNT"),
-    warehouse=os.getenv("SNOWFLAKE_WAREHOUSE"),
-    database=os.getenv("SNOWFLAKE_DATABASE"),
-    schema=os.getenv("SNOWFLAKE_SCHEMA"),
-)
+def get_secret(key, default=""):
+    # Check Streamlit Cloud secrets first, fallback to local environment variables
+    if hasattr(st, "secrets") and key in st.secrets:
+        return st.secrets[key]
+    return os.getenv(key, default)
 
-query = "SELECT * FROM hr_attrition_final;"
-df = pd.read_sql(query, conn)
 
-print(df.shape)
-print(df.head())
-
-conn.close()
+def get_snowflake_connection():
+    conn = snowflake.connector.connect(
+        user=get_secret("SNOWFLAKE_USER"),
+        password=get_secret("SNOWFLAKE_PASSWORD"),
+        account=get_secret("SNOWFLAKE_ACCOUNT"),
+        role=get_secret("SNOWFLAKE_ROLE", "ACCOUNTADMIN"),
+        warehouse=get_secret("SNOWFLAKE_WAREHOUSE", "HR_WH1"),
+        database=get_secret("SNOWFLAKE_DATABASE", "HR_ATTRITION"),
+        schema=get_secret("SNOWFLAKE_SCHEMA", "RAW"),
+    )
+    return conn
