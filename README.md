@@ -12,13 +12,22 @@
   <b>Transforming workforce data into predictive retention strategies.</b>
 </p>
 
+[![](https://img.shields.io/badge/🚀_Live_Demo-Open_Streamlit_App-FF4B4B?style=for-the-badge&logo=streamlit)](https://your-streamlit-app-link.streamlit.app)
+
 </div>
 
----$$\text{Risk Score} = \text{Overtime} + \text{Low Pay (<45K)} + \text{Far Commute (>20km)} + \text{Low Tenure (<2yrs)} + \text{Low Satisfaction } (\le 2)$$
+---
 
 ## 📌 Project Overview
 
 > **AttritionIQ** is an end-to-end Enterprise HR Analytics platform designed to identify turnover drivers, model attrition risk, and provide HR teams with actionable retention lists before high-value employees exit.
+
+---
+
+## 🚀 Live Demo & Interactive App
+
+* 🌐 **Streamlit Web Application:** [Launch AttritionIQ Live App](https://your-streamlit-app-link.streamlit.app)
+* 📊 **Power BI Dashboard:** Pre-configured in `HR_Attrition_Dashboard.pbix` inside the repository.
 
 ---
 
@@ -41,9 +50,7 @@
 
 ## ⚙️ Risk Scoring Algorithm
 
-AttritionIQ dynamic risk scores evaluate 5 core operational indicators:
-
-$$\text{Risk Score} = \text{Overtime} + \text{Low Pay (<45K)} + \text{Far Commute (>20km)} + \text{Low Tenure (<2yrs)} + \text{Low Satisfaction (\le 2)}$$
+AttritionIQ dynamic risk scores evaluate 5 core operational indicators (Overtime, Low Income, Distance, Tenure, and Low Satisfaction ≤ 2):
 
 ```dax
 Risk Factors = 
